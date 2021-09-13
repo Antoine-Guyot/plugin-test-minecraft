@@ -1,0 +1,12 @@
+name: PluginTest
+version: 0.1
+author: Bayantoine
+main: fr.bayantoine.plugintest.Main
+api-version: 1.13
+commands:
+  test:
+    description: Commande de test
+    permission: test.use
+  alert:
+    description: Message d'alerte
+    permission: admin.use
