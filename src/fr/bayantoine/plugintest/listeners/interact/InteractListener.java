@@ -1,5 +1,8 @@
 package fr.bayantoine.plugintest.listeners.interact;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,6 +20,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class InteractListener implements Listener {
 
@@ -32,6 +36,7 @@ public class InteractListener implements Listener {
             BlockState bs = event.getClickedBlock().getState();
             if(bs instanceof Sign) {
                 Sign sign = (Sign) bs;
+
                 if(sign.getLine(0).equals("[Time]")) {
                     if(sign.getLine(1).equals("day")) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "time set day");
@@ -39,6 +44,39 @@ public class InteractListener implements Listener {
                     } else if(sign.getLine(1).equals("night")) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "time set night");
                         player.sendMessage("NUIT");
+                    }
+                }
+
+                if(sign.getLine(0).equals("[Shop]")) {
+                    if(sign.getLine(2) != null) {
+                        try {
+                            int cost = Integer.parseInt(sign.getLine(2));
+                            if(player.getInventory().getItemInMainHand().getItemMeta().hasDisplayName() && player.getInventory().getItemInMainHand().getItemMeta().hasLore()) {
+                                if(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals("Carte de paiement")) {
+                                    List<String> lore = player.getInventory().getItemInMainHand().getItemMeta().getLore();
+                                    if(lore.size() >= 2) {
+                                        if(Integer.parseInt(lore.get(1)) >= cost) {
+                                            int money = Integer.parseInt(lore.get(1));
+                                            // Récupère les items dans la main
+                                            final ItemStack card = player.getInventory().getItemInMainHand();
+                                            ItemMeta customCard = card.getItemMeta();
+                                            // Modification du lore
+                                            customCard.setLore(Arrays.asList(lore.get(0), "" + (money - cost)));
+                                            card.setItemMeta(customCard);
+                                            // On met à jour l'inventaire
+                                            player.getInventory().setItemInMainHand(card);
+                                            player.updateInventory();
+                                            player.sendMessage("Achat effectué");
+                                            player.getInventory().addItem(new ItemStack(Material.BREAD, 1));
+                                        } else {
+                                            player.sendMessage("Vous n'avez pas assez d'argent");
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            
+                        }
                     }
                 }
             }
