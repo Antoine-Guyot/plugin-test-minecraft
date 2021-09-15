@@ -47,7 +47,15 @@ public class PlayerJoinListener implements Listener {
         // Donne du pain
         //player.getInventory().addItem(new ItemStack(Material.BREAD, 12));
 
-        //player.updateInventory();
+        // Carte de paiement
+        ItemStack card = new ItemStack(Material.PAPER, 1);
+        ItemMeta customCard = card.getItemMeta();
+        customCard.setDisplayName("Carte de paiement");
+        customCard.setLore(Arrays.asList("Carte de paiement", "1000"));
+        card.setItemMeta(customCard);
+        player.getInventory().addItem(card);
+
+        player.updateInventory();
 
         //event.setJoinMessage("Attention ! " + player.getName() + " est arrivé !");
 
