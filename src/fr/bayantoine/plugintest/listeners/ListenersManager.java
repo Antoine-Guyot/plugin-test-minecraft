@@ -21,7 +21,7 @@ public class ListenersManager {
     public void registerListeners() {
         this.publicManager.registerEvents(new PlayerJoinListener(this.plugin), this.plugin);
         this.publicManager.registerEvents(new PlayerQuitListener(), this.plugin);
-        this.publicManager.registerEvents(new InteractListener(), this.plugin);
+        this.publicManager.registerEvents(new InteractListener(this.plugin), this.plugin);
     }
     
 }
